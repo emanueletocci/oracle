@@ -1,70 +1,63 @@
 # 👾 Oracle (Nav)
 
-> *"The Phandom Thieves of Hearts' support system."*
+> *"The Phantom Thieves of Hearts' ultimate support system."*
 
-![Oracle Banner](https://i.imgur.com/your-banner-placeholder.png)
-*(Suggerimento: Qui potresti mettere una GIF di Futaba che digita al computer o il logo dei Phantom Thieves)*
+![Oracle Banner](https://placehold.co/600x200/2f3136/39ff14?text=ORACLE+SYSTEM)
+*(Tip: Replace this link with a GIF of Futaba hacking or the Phantom Thieves logo)*
 
-## 🔰 Introduzione
+## 🔰 Introduction
 
-**Oracle** è un bot Discord sviluppato in **TypeScript** (Node.js) progettato per gestire l'atmosfera e la sicurezza del tuo "Palazzo" (Server). Ispirato all'estetica e alle funzionalità di supporto di Futaba Sakura da *Persona 5 Royal*.
+**Oracle** is a Discord bot built with **TypeScript** (Node.js), designed to manage the atmosphere and security of your "Palace" (Server). Heavily inspired by the aesthetic and support role of Futaba Sakura from *Persona 5 Royal*.
 
-Il bot combina un motore audio ad alta qualità (basato su Lavalink) con strumenti di moderazione essenziali.
+The bot combines a high-quality audio engine (powered by Lavalink) with essential moderation tools to keep Shadows at bay.
 
-## ⚡ Funzionalità (Abilità)
+## ⚡ Features (Abilities)
 
 ### 🎧 Audio & Lofi (Leblanc Vibes)
-* **Lofi Mode 24/7:** Uno stream continuo di musica Lofi per studiare o rilassarsi (Cafe Leblanc style).
-* **High-Res Streaming:** Riproduzione musicale tramite ricerca (YouTube/Spotify) gestita da **Lavalink** per zero lag.
-* **Comandi:** Play, Pause, Skip, Queue, Loop.
+* **24/7 Lofi Mode:** A continuous stream of Lofi beats for studying or relaxing (Cafe Leblanc style).
+* **High-Res Streaming:** Lag-free music playback via search (YouTube/Spotify), handled by **Lavalink**.
+* **Controls:** Play, Pause, Skip, Queue, Loop, and Volume adjustments.
 
-### 🛡️ Sicurezza (Shadow Ops)
-* **Moderazione Automatica:** Sistema di warn e log per tenere traccia delle "Shadows" nel server.
-* **Ban & Kick:** Comandi rapidi per rimuovere elementi indesiderati.
-* **Audit Log:** Registro delle azioni intraprese dallo staff.
+### 🛡️ Security (Shadow Ops)
+* **Auto-Moderation:** Warning system and logs to track "Shadows" within the server.
+* **Ban & Kick:** Quick commands to remove hostile targets.
+* **Audit Log:** detailed records of all actions taken by the staff.
 
 ## 🛠️ Tech Stack
 
 * **Core:** [Node.js](https://nodejs.org/) & [TypeScript](https://www.typescriptlang.org/)
 * **Library:** [Discord.js v14](https://discord.js.org/)
 * **Audio Engine:** [Lavalink](https://github.com/lavalink-devs/Lavalink)
-* **Database:** [MongoDB](https://www.mongodb.com/) (per salvare warn e playlist)
+* **Database:** [MongoDB](https://www.mongodb.com/) (Persist warns and playlists)
 
-## 🚀 Installazione (Setup Protocol)
+## 🚀 Installation (Setup Protocol)
 
-Per avviare Oracle localmente:
+To start Oracle locally in your environment:
 
-1.  **Clona il repository:**
+1.  **Clone the repository:**
     ```bash
     git clone [https://github.com/emanueletocci/oracle.git](https://github.com/emanueletocci/oracle.git)
     cd oracle
     ```
 
-2.  **Installa le dipendenze:**
+2.  **Install dependencies:**
     ```bash
     npm install
     ```
 
-3.  **Configura le variabili d'ambiente:**
-    Rinomina il file `.env.example` in `.env` e inserisci le tue chiavi:
+3.  **Configure Environment Variables:**
+    Rename `.env.example` to `.env` and enter your keys:
     ```env
-    DISCORD_TOKEN=il_tuo_token_qui
-    MONGO_URI=la_tua_stringa_connessione_mongo
+    DISCORD_TOKEN=your_bot_token_here
+    MONGO_URI=your_mongodb_connection_string
     LAVALINK_HOST=localhost
     LAVALINK_PASSWORD=youshallnotpass
     ```
 
-4.  **Avvia il supporto:**
+4.  **Launch Support:**
     ```bash
     npm run build
     npm start
     ```
-
-## 📜 Roadmap (Mementos Request)
-
-- [ ] Aggiungere risposte casuali con citazioni di Futaba ("Mwehehe!").
-- [ ] Implementare dashboard web.
-- [ ] Sistema di livelli (Confidant Rank).
-
 ---
-*"Non è un gioco. Sto riscrivendo la realtà!"* — Oracle
+*"This isn't a game. I'm rewriting reality!"* — Oracle
