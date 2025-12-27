@@ -2,7 +2,11 @@
 
 > *"The Phantom Thieves of Hearts' ultimate support system."*
 
-https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExamU0ZTdsYzN5MDN6djA5OG9yczE3YnE1NmEycnZ6eHV6dWRieGgxciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mK2TbSNux5a6fOkxzC/giphy.gif
+<div align="center">
+  <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExamU0ZTdsYzN5MDN6djA5OG9yczE3YnE1NmEycnZ6eHV6dWRieGgxciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mK2TbSNux5a6fOkxzC/giphy.gif" alt="Oracle System Online" width="600">
+  <br>
+  <h1>👾 Oracle (Nav)</h1>
+</div>
 
 ## 🔰 Introduction
 
