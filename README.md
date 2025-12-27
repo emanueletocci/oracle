@@ -2,8 +2,7 @@
 
 > *"The Phantom Thieves of Hearts' ultimate support system."*
 
-![Oracle Banner](https://placehold.co/600x200/2f3136/39ff14?text=ORACLE+SYSTEM)
-*(Tip: Replace this link with a GIF of Futaba hacking or the Phantom Thieves logo)*
+https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExamU0ZTdsYzN5MDN6djA5OG9yczE3YnE1NmEycnZ6eHV6dWRieGgxciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mK2TbSNux5a6fOkxzC/giphy.gif
 
 ## 🔰 Introduction
 
