@@ -141,3 +141,5 @@ vite.config.ts.timestamp-*
 # App files
 config.json
 node_modules
+music/lofi.mp3
+music/test.mp3

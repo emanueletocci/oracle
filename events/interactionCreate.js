@@ -14,7 +14,7 @@ module.exports = {
             return;
         }
 
-        // --- INIZIO COOLDOWN (SPOSTATO PRIMA) ---
+        // --- INIZIO COOLDOWN ---
         const { cooldowns } = interaction.client;
 
         if (!cooldowns.has(command.data.name)) {
