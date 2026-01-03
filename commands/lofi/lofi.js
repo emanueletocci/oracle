@@ -1,71 +1,120 @@
 const { SlashCommandBuilder } = require("discord.js");
 const {
-	joinVoiceChannel,
-	createAudioPlayer,
-	createAudioResource,
-	AudioPlayerStatus,
-	NoSubscriberBehavior,
+    joinVoiceChannel,
+    createAudioPlayer,
+    createAudioResource,
+    AudioPlayerStatus,
+    NoSubscriberBehavior,
+    getVoiceConnection, 
 } = require("@discordjs/voice");
 const path = require("node:path");
 const fs = require("fs");
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName("lofi")
-		.setDescription("Avvia la radio lofi nel canale audio!"),
+    data: new SlashCommandBuilder()
+        .setName("lofi")
+        .setDescription("Gestione della radio Lofi")
+        // START subcommand
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("play")
+                .setDescription("Avvia la radio lofi H24 nel canale audio")
+        )
+        // STOP subcommand
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("stop")
+                .setDescription("Ferma la radio e disconnette il bot")
+        ),
 
-	async execute(interaction) {
-		const channel = interaction.member.voice.channel;
-		if (!channel)
-			return interaction.reply({
-				content:
-					"⛓️ **DETENUTO!** Che insolenza... Cerchi di ascoltare la musica senza essere in cella? Entra subito in vocale!",
-				ephemeral: true,
-			});
-		await interaction.reply(
-			"🐱 **Ehi Joker!** Basta combattere per oggi. Ascolta questa Lofi e vai a dormire!"
-		);
+    async execute(interaction) {
+        // Retrieve the subcommand used
+        const subcommand = interaction.options.getSubcommand();
 
-		const musicPath = path.join(__dirname, "../../music/lofi.mp3");
+        // --- PLAY LOGIC ---
+        if (subcommand === "play") {
+            const channel = interaction.member.voice.channel;
+            
+            if (!channel)
+                return interaction.reply({
+                    content: "⛓️ **Detenuto!** Che insolenza... Cerchi di ascoltare la musica senza essere in cella? Entra subito in vocale!",
+                    ephemeral: true,
+                });
 
-		// 1. File check
-		if (!fs.existsSync(musicPath)) {
-			return interaction.followUp(`❌ File non trovato: ${musicPath}`);
-		}
+            // Check if the bot is already connected in this guild
+            const existingConnection = getVoiceConnection(interaction.guild.id);
+            if (existingConnection) {
+                return interaction.reply({
+                    content: "⚠️⛓️ Detenuto! Non vedi che la radio è già attiva? Usa `/lofi stop` se vuoi fermarla.",
+                    ephemeral: true
+                });
+            }
 
-		const connection = joinVoiceChannel({
-			channelId: channel.id,
-			guildId: interaction.guild.id,
-			adapterCreator: interaction.guild.voiceAdapterCreator,
-		});
+            await interaction.reply(
+                `🐱 **Ehi ${interaction.member}!** Basta combattere per oggi. Ascolta questa Lofi e rilassati!`
+            );
 
-		const player = createAudioPlayer({
-			behaviors: {
-				noSubscriber: NoSubscriberBehavior.Play,
-			},
-		});
+            const musicPath = path.join(__dirname, "../../music/LOFI.mp3");
 
-		connection.subscribe(player);
+            if (!fs.existsSync(musicPath)) {
+                return interaction.followUp(`❌ File non trovato: ${musicPath}`);
+            }
 
-		// 2. Resource creation
-		// function to play the song
-        const playSong = () => {
-            const resource = createAudioResource(musicPath, {
-                inlineVolume: true,
+            // Channel connection
+            const connection = joinVoiceChannel({
+                channelId: channel.id,
+                guildId: interaction.guild.id,
+                adapterCreator: interaction.guild.voiceAdapterCreator,
             });
-            player.play(resource);
-        };
 
-		playSong();
-		
-		// Loop the song
-        player.on(AudioPlayerStatus.Idle, () => {
-            console.log("🔄 Loop: Riavvio la traccia...");
+            // Player creation
+            const player = createAudioPlayer({
+                behaviors: {
+                    noSubscriber: NoSubscriberBehavior.Play, // Continua anche senza utenti
+                },
+            });
+
+            connection.subscribe(player);
+
+            // Music playback function
+            const playSong = () => {
+                const resource = createAudioResource(musicPath, {
+                    inlineVolume: true,
+                });
+                player.play(resource);
+            };
+
+            // Start
+            console.log("▶️ Riproduzione avviata...");
             playSong();
-        });
 
-		player.on("error", (error) => {
-			console.error("❌ Error:", error.message);
-		});
-	},
+            // Infinite Loop Handling
+            player.on(AudioPlayerStatus.Idle, () => {
+                console.log("🔄 Loop: Riavvio la traccia...");
+                playSong();
+            });
+
+            player.on("error", (error) => {
+                console.error("❌ Error:", error.message);
+            });
+        } 
+        
+        // --- STOP LOGIC ---
+        else if (subcommand === "stop") {
+            // Retrieve the current bot connection for this server
+            const connection = getVoiceConnection(interaction.guild.id);
+
+            if (!connection) {
+                return interaction.reply({
+                    content: "❌⛓️ **Detenuto!** Che insolenza... Non vedi che il bot non è connesso a nessun canale vocale?",
+                    ephemeral: true,
+                });
+            }
+
+            // Destroy the connection (disconnects the bot and stops the player)
+            connection.destroy();
+
+            return interaction.reply("🛑 **Radio spenta.** Il bot è tornato al Leblanc.");
+        }
+    },
 };
