@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-
+const { SlashCommandBuilder, EmbedBuilder , AttachmentBuilder} = require("discord.js");
+const path = require('node:path');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("ship")
@@ -63,49 +63,61 @@ module.exports = {
 
 		let resultMessage;
 		let arcane;
+        let imagePath = path.join(process.cwd(), 'assets/images/hat.png');
 
 		// --- EASTER EGGS NUMERICI (Priorità Alta) ---
 		if (lovePercent === 0) {
 			resultMessage =
-				"⚰️ **Nulla.** Il vuoto cosmico. Nemmeno Arsène può rubare questo cuore, perché non c'è.";
+				"⚰️ Nulla, il vuoto cosmico. Nemmeno Arsène può rubare questo cuore, perché non c'è.";
 			arcane = "THE VOID";
 		} else if (lovePercent === 69) {
-			resultMessage = "💀 **Ryuji:** For real?! Che numero assurdo!";
+			resultMessage = "💀 For real?! Che numero assurdo!";
 			arcane = "THE CHARIOT";
+            imagePath = path.join(process.cwd(), 'assets/images/ruijy.png');
 		} else if (lovePercent === 77) {
 			resultMessage =
 				"🔮 **Jackpot!** La veggente di Shinjuku predice una fortuna sfacciata tra voi due!";
 			arcane = "THE FORTUNE";
+            imagePath = path.join(process.cwd(), 'assets/images/chihaya.png');
 		} else if (lovePercent === 99) {
 			resultMessage =
 				"🃏 **Take Your Heart!** Manca solo l'1%... serve solo inviare la Lettera di Sfida!";
 			arcane = "JOLLY";
+            imagePath = path.join(process.cwd(), 'assets/images/callingCard.png');
 		}
 		else if (lovePercent < 15) {
 			resultMessage =
 				"💉 Questa relazione è tossica. Vi serve una visita medica urgente.";
 			arcane = "THE DEATH";
+            imagePath = path.join(process.cwd(), 'assets/images/takemi.png');
 		} else if (lovePercent < 35) {
 			resultMessage =
 				"🐱 Ehi... credo che tu sia nella Friendzone, proprio come me con Lady Ann.";
 			arcane = "THE MAGICIAN";
+            imagePath = path.join(process.cwd(), 'assets/images/morgana.png');
 		} else if (lovePercent < 55) {
 			resultMessage =
 				"⚖️ Vi odiate o vi amate? C'è una strana tensione... una rivalità mortale.";
 			arcane = "THE JUSTICE";
+            imagePath = path.join(process.cwd(), 'assets/images/akechi.png');
 		} else if (lovePercent < 70) {
 			resultMessage =
 				"🍸 È una relazione complicata e adulta. Forse dovreste parlarne davanti a un drink.";
 			arcane = "THE DEVIL";
+            imagePath = path.join(process.cwd(), 'assets/images/ohya.png');
 		} else if (lovePercent < 85) {
 			resultMessage =
-				"🤝 Un legame indissolubile! Siete pronti per il Mementos.";
+				"🤝 Un legame indissolubile! Siete pronti per i Memento.";
 			arcane = "THE LOVERS";
+            imagePath = path.join(process.cwd(), 'assets/images/ann.png');
 		} else {
 			resultMessage =
 				"🦋 Io sono te, tu sei me... Hai trasformato una promessa in un patto di sangue.";
 			arcane = "THE WORLD";
+            imagePath = path.join(process.cwd(), 'assets/images/lavenza.png');
 		}
+
+        const file = new AttachmentBuilder(imagePath, { name: 'image.png' });
 
 		// --- EMBED CREATION ---
 		const embed = new EmbedBuilder()
@@ -117,14 +129,11 @@ module.exports = {
 				{ name: "Social Link Rank", value: `${visualBar}\n\n${resultMessage}` }
 			)
 			.setColor(0xe61c24)
-			.setThumbnail("https://imgur.com/gallery/phantom-thieves-BbUWtk8") // Logo Phantom Thieves
-			.setImage(
-				"https://imgur.com/gallery/phantom-thieves-BbUWtk8"
-			) 
+			.setThumbnail("attachment://image.png") 
 			.setFooter({
 				text: `Take Your Heart ❤️‍🩹`,
 			});
 
-		await interaction.reply({ embeds: [embed] });
+		await interaction.reply({ embeds: [embed], files: [file] });
 	},
 };
