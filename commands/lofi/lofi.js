@@ -26,7 +26,7 @@ module.exports = {
 			"🐱 **Ehi Joker!** Basta combattere per oggi. Ascolta questa Lofi e vai a dormire!"
 		);
 
-		const musicPath = path.join(__dirname, "../../music/LOFI.mp3");
+		const musicPath = path.join(__dirname, "../../music/lofi.mp3");
 
 		// 1. File check
 		if (!fs.existsSync(musicPath)) {
@@ -48,12 +48,21 @@ module.exports = {
 		connection.subscribe(player);
 
 		// 2. Resource creation
-		const resource = createAudioResource(musicPath, {
-			inlineVolume: true,
-		});
+		// function to play the song
+        const playSong = () => {
+            const resource = createAudioResource(musicPath, {
+                inlineVolume: true,
+            });
+            player.play(resource);
+        };
 
-		console.log("▶️ Riproduzione avviata...");
-		player.play(resource);
+		playSong();
+		
+		// Loop the song
+        player.on(AudioPlayerStatus.Idle, () => {
+            console.log("🔄 Loop: Riavvio la traccia...");
+            playSong();
+        });
 
 		player.on("error", (error) => {
 			console.error("❌ Error:", error.message);
