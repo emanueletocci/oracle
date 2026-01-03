@@ -143,3 +143,4 @@ config.json
 node_modules
 music/lofi.mp3
 music/test.mp3
+assets/music/lofi.mp3

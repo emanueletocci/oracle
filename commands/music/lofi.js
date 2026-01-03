@@ -54,7 +54,7 @@ module.exports = {
                 `🐱 **Ehi ${interaction.member}!** Basta combattere per oggi. Ascolta questa Lofi e rilassati!`
             );
 
-            const musicPath = path.join(__dirname, "../../music/lofi.mp3");
+            const musicPath = path.join(__dirname, "../../assets/music/lofi.mp3");
 
             if (!fs.existsSync(musicPath)) {
                 return interaction.followUp(`❌ File non trovato: ${musicPath}`);
