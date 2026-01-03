@@ -54,7 +54,7 @@ module.exports = {
                 `🐱 **Ehi ${interaction.member}!** Basta combattere per oggi. Ascolta questa Lofi e rilassati!`
             );
 
-            const musicPath = path.join(__dirname, "../../music/LOFI.mp3");
+            const musicPath = path.join(__dirname, "../../music/lofi.mp3");
 
             if (!fs.existsSync(musicPath)) {
                 return interaction.followUp(`❌ File non trovato: ${musicPath}`);
@@ -70,7 +70,7 @@ module.exports = {
             // Player creation
             const player = createAudioPlayer({
                 behaviors: {
-                    noSubscriber: NoSubscriberBehavior.Play, // Continua anche senza utenti
+                    noSubscriber: NoSubscriberBehavior.Play, 
                 },
             });
 
