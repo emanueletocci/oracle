@@ -6,66 +6,63 @@
   <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExamU0ZTdsYzN5MDN6djA5OG9yczE3YnE1NmEycnZ6eHV6dWRieGgxciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mK2TbSNux5a6fOkxzC/giphy.gif" alt="Oracle System Online" width="600">
 </div>
 
-## 🔰 Introduction
+## 🔰 Mission: Rewrite Reality
 
-**Oracle** is a Discord bot built with **TypeScript** (Node.js), designed to manage the atmosphere and security of your "Palace" (Server). Heavily inspired by the aesthetic and support role of Futaba Sakura from *Persona 5 Royal*.
+**Oracle** is a next-gen **All-in-One** Discord bot built with **Discord.js** (Node.js).
 
-The bot combines a high-quality audio engine (powered by Lavalink) with essential moderation tools to keep Shadows at bay.
+**The Objective:**
+Stop cluttering your server with dozens of single-purpose, premium-locked bots. Oracle's mission is to provide **one** stylish, free, and powerful "Palace" manager that covers everything: from 24/7 atmosphere to security.
+
+Heavily inspired by Futaba Sakura (*Persona 5 Royal*), Oracle brings the Phantom Thieves aesthetic directly to your community.
+
+---
+
+## 🗺️ Development Roadmap
+
+The project is evolving to replace the need for multiple bots. Here is the current status:
+
+1.  **🎧 24/7 LoFi Radio:** ✅ **ONLINE & STABLE** (Core Feature)
+2.  **🎭 Fun & Roleplay:** 🚧 *In Progress* (Bringing the Metaverse to chat)
+3.  **🛡️ Security Suite:** 📝 *Planned* (Replacing standard moderation bots)
+
+---
 
 ## ⚡ Features (Abilities)
 
-### 🎧 Audio & Lofi (Leblanc Vibes)
+### 🎧 24/7 LoFi Radio (Leblanc Atmosphere)
+*> Status: READY*
 
-* **24/7 Lofi Mode:** A continuous stream of Lofi beats for studying or relaxing (Cafe Leblanc style).
-* **High-Res Streaming:** Lag-free music playback via search (YouTube/Spotify), handled by **Lavalink**.
-* **Controls:** Play, Pause, Skip, Queue, Loop, and Volume adjustments.
+The beating heart of Oracle. Just like staying at Cafe Leblanc, the vibes never stop.
+* **Always-On Streaming:** A continuous, 24/7 high-quality LoFi stream designed for studying, gaming, or just relaxing.
+* **Automatic Reconnection:** If Discord drops the connection, Oracle reconnects instantly to keep the atmosphere alive.
+* **Zero Config:** Dedicated voice channel support. The bot lives there.
+* **Lag-Free:** Optimized purely for stability and audio quality.
+
+### 🎭 Roleplay & Fun (Metaverse Protocols)
+*> Status: IN DEVELOPMENT*
+
+*Focus: Community Engagement*
+* **Interaction Commands:** Express yourself with anime/Persona-styled reaction commands (hug, slap, high-five).
+* **RNG & Mini-games:** Dice rolls, coin flips, and "fortune telling" styled as Tarot card readings.
+* **Calling Cards:** Send stylized "Take Your Heart" messages to other users.
 
 ### 🛡️ Security (Shadow Ops)
+*> Status: COMING SOON*
 
-* **Auto-Moderation:** Warning system and logs to track "Shadows" within the server.
-* **Ban & Kick:** Quick commands to remove hostile targets.
-* **Audit Log:** detailed records of all actions taken by the staff.
+*Focus: Server Integrity & Auto-Mod*
+* **The goal:** Replace bots like Dyno/MEE6 for basic moderation.
+* **Auto-Moderation:** Warning system to track "Shadows" (troublemakers).
+* **Audit Log:** Detailed records of all actions taken by the Staff.
+
+---
 
 ## 🛠️ Tech Stack
 
 * **Core:** [Node.js](https://nodejs.org/) & [TypeScript](https://www.typescriptlang.org/)
-* **Library:** [Discord.js v14](https://discord.js.org/)
-* **Audio Engine:** [Lavalink](https://github.com/lavalink-devs/Lavalink)
-* **Database:** [MongoDB](https://www.mongodb.com/) (Persist warns and playlists)
-
-## 🚀 Installation (Setup Protocol)
-
-To start Oracle locally in your environment:
-
-1. **Clone the repository:**
-
-    ```bash
-    git clone [https://github.com/emanueletocci/oracle.git](https://github.com/emanueletocci/oracle.git)
-    cd oracle
-    ```
-
-2. **Install dependencies:**
-
-    ```bash
-    npm install
-    ```
-
-3. **Configure Environment Variables:**
-    Rename `.env.example` to `.env` and enter your keys:
-
-    ```env
-    DISCORD_TOKEN=your_bot_token_here
-    MONGO_URI=your_mongodb_connection_string
-    LAVALINK_HOST=localhost
-    LAVALINK_PASSWORD=youshallnotpass
-    ```
-
-4. **Launch Support:**
-
-    ```bash
-    npm run build
-    npm start
-    ```
+* **Library:** [Discord.js](https://discord.js.org/)
+* **Audio Engine:** Discord.js Voice / YTDL-Core (Native high-performance stream)
+* **Database:** [MongoDB](https://www.mongodb.com/) (Persist warns and user data)
 
 ---
+
 *"This isn't a game. I'm rewriting reality!"* — Oracle
