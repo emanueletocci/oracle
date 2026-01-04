@@ -1,0 +1,41 @@
+const { Events, EmbedBuilder } = require('discord.js');
+const config = require('../config.json');
+
+module.exports = {
+    name: Events.GuildMemberAdd,
+    once: false,
+    async execute(member) {
+        // LOG 1: Vediamo se l'evento scatta
+        console.log(`[DEBUG] Evento GuildMemberAdd scattato per: ${member.user.tag}`);
+
+        const channelId = config.welcomeChannelId;
+        // LOG 2: Verifichiamo che l'ID sia letto correttamente
+        console.log(`[DEBUG] ID Canale dal config: ${channelId}`);
+
+        const channel = member.guild.channels.cache.get(channelId);
+
+        if (!channel) {
+            // LOG 3: Se entra qui, il problema è l'ID o i permessi
+            console.error(`[ERRORE] Canale NON trovato! Il bot ha il permesso di vederlo? L'ID è giusto?`);
+            // Proviamo a stampare tutti i canali che il bot vede per capire se è cieco
+            console.log(`[DEBUG] Canali visibili dal bot: ${member.guild.channels.cache.map(c => c.name).join(', ')}`);
+            return;
+        }
+
+        console.log(`[DEBUG] Canale trovato: ${channel.name}. Tento l'invio...`);
+
+        const welcomeEmbed = new EmbedBuilder()
+            .setColor(0x00FF00)
+            .setTitle(`Benvenuto!`)
+            .setDescription(`Ciao ${member}, benvenuto nel server!`)
+            .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+            .setTimestamp();
+
+        try {
+            await channel.send({ embeds: [welcomeEmbed] });
+            console.log(`[SUCCESS] Messaggio inviato correttamente!`);
+        } catch (error) {
+            console.error(`[ERRORE] Impossibile inviare il messaggio:`, error);
+        }
+    },
+};
