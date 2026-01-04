@@ -33,7 +33,7 @@ module.exports = {
             color = 0x000000; 
         }
 
-        const imagePath = path.join(process.cwd(), `assets/images/${imageName}`);
+        const imagePath = path.join(process.cwd(), `assets/images/coins/${imageName}`);
         let file;
 
         try {
