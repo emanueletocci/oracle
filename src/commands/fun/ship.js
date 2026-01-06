@@ -4,7 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("ship")
 		.setDescription(
-			"Valuta il Social Link tra due persone (Persona 5 Style) 🎭"
+			"Valuta il legame sociale tra due persone 🎭"
 		)
 		.addUserOption((option) =>
 			option
@@ -35,7 +35,7 @@ module.exports = {
 		// 1. Self-Ship
 		if (user1.id === user2.id) {
 			return interaction.reply({
-				content: "😼 Morgana: Ehi Joker! Smettila di guardarti allo specchio!",
+				content: `😼Ehi ${user1}! Smettila di guardarti allo specchio!`,
 				ephemeral: true,
 			});
 		}
@@ -46,7 +46,7 @@ module.exports = {
 			user2.id === interaction.client.user.id
 		) {
 			return interaction.reply(
-				"😼 **Morgana:** Ehi Joker! Niente distrazioni, devi andare a dormire! Lascia stare il bot."
+				`😼 Ehi ${interaction.client.user}! Niente distrazioni, devi andare a dormire! Lascia stare il bot.`
 			);
 		}
 
