@@ -9,13 +9,13 @@ module.exports = {
 		.addUserOption((option) =>
 			option
 				.setName("utente1")
-				.setDescription("Il primo Confidant")
+				.setDescription("Il primo confidente")
 				.setRequired(true)
 		)
 		.addUserOption((option) =>
 			option
 				.setName("utente2")
-				.setDescription("Il secondo Confidant (opzionale)")
+				.setDescription("Il secondo confidente")
 				.setRequired(false)
 		),
 
