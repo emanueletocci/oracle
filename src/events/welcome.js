@@ -2,6 +2,7 @@ const { Events, EmbedBuilder } = require('discord.js');
 const config = require('../config.json');
 
 module.exports = {
+    enabled: false,
     name: Events.GuildMemberAdd,
     once: false,
     async execute(member) {
