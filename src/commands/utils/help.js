@@ -12,7 +12,7 @@ module.exports = {
         // Create an Embed to make the list looks nice
         const embed = new EmbedBuilder()
             .setTitle('📚 Lista Comandi')
-            .setColor('Blue')
+            .setColor('Red')
             .setDescription('Ecco tutti i comandi che puoi usare:');
 
         // Transform the collection into a list of fields for the embed
