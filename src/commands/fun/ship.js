@@ -63,7 +63,7 @@ module.exports = {
 
 		let resultMessage;
 		let arcane;
-        let imagePath = path.join(process.cwd(), 'assets/images/hat.png');
+        let imagePath = path.join(process.cwd(), 'assets/images/characters/hat.png');
 
 		// --- EASTER EGGS NUMERICI (Priorità Alta) ---
 		if (lovePercent === 0) {
@@ -73,48 +73,48 @@ module.exports = {
 		} else if (lovePercent === 69) {
 			resultMessage = "💀 For real?! Che numero assurdo!";
 			arcane = "THE CHARIOT";
-            imagePath = path.join(process.cwd(), 'assets/images/ruijy.png');
+            imagePath = path.join(process.cwd(), 'assets/images/characters/ruijy.png');
 		} else if (lovePercent === 77) {
 			resultMessage =
 				"🔮 **Jackpot!** La veggente di Shinjuku predice una fortuna sfacciata tra voi due!";
 			arcane = "THE FORTUNE";
-            imagePath = path.join(process.cwd(), 'assets/images/chihaya.png');
+            imagePath = path.join(process.cwd(), 'assets/images/characters/chihaya.png');
 		} else if (lovePercent === 99) {
 			resultMessage =
 				"🃏 **Take Your Heart!** Manca solo l'1%... serve solo inviare la Lettera di Sfida!";
 			arcane = "JOLLY";
-            imagePath = path.join(process.cwd(), 'assets/images/callingCard.png');
+            imagePath = path.join(process.cwd(), 'assets/images/characters/callingCard.png');
 		}
 		else if (lovePercent < 15) {
 			resultMessage =
 				"💉 Questa relazione è tossica. Vi serve una visita medica urgente.";
 			arcane = "THE DEATH";
-            imagePath = path.join(process.cwd(), 'assets/images/takemi.png');
+            imagePath = path.join(process.cwd(), 'assets/images/characters/takemi.png');
 		} else if (lovePercent < 35) {
 			resultMessage =
 				"🐱 Ehi... credo che tu sia nella Friendzone, proprio come me con Lady Ann.";
 			arcane = "THE MAGICIAN";
-            imagePath = path.join(process.cwd(), 'assets/images/morgana.png');
+            imagePath = path.join(process.cwd(), 'assets/images/characters/morgana.png');
 		} else if (lovePercent < 55) {
 			resultMessage =
 				"⚖️ Vi odiate o vi amate? C'è una strana tensione... una rivalità mortale.";
 			arcane = "THE JUSTICE";
-            imagePath = path.join(process.cwd(), 'assets/images/akechi.png');
+            imagePath = path.join(process.cwd(), 'assets/images/characters/akechi.png');
 		} else if (lovePercent < 70) {
 			resultMessage =
 				"🍸 È una relazione complicata e adulta. Forse dovreste parlarne davanti a un drink.";
 			arcane = "THE DEVIL";
-            imagePath = path.join(process.cwd(), 'assets/images/ohya.png');
+            imagePath = path.join(process.cwd(), 'assets/images/characters/ohya.png');
 		} else if (lovePercent < 85) {
 			resultMessage =
 				"🤝 Un legame indissolubile! Siete pronti per i Memento.";
 			arcane = "THE LOVERS";
-            imagePath = path.join(process.cwd(), 'assets/images/ann.png');
+            imagePath = path.join(process.cwd(), 'assets/images/characters/ann.png');
 		} else {
 			resultMessage =
 				"🦋 Io sono te, tu sei me... Hai trasformato una promessa in un patto di sangue.";
 			arcane = "THE WORLD";
-            imagePath = path.join(process.cwd(), 'assets/images/lavenza.png');
+            imagePath = path.join(process.cwd(), 'assets/images/characters/lavenza.png');
 		}
 
         const file = new AttachmentBuilder(imagePath, { name: 'image.png' });

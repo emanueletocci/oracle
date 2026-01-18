@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-    // 1. Command Definition
     data: new SlashCommandBuilder()
         .setName('roll')
         .setDescription('Lancia i dadi.')
@@ -12,7 +11,7 @@ module.exports = {
                 .setMinValue(2) // A die must have at least 2 faces
                 .setMaxValue(100) // Optional limit to prevent huge numbers
         )
-        // Option 2: Amount of dice to roll (e.g., 1 die, 3 dice...)
+        // Amount of dice to roll 
         .addIntegerOption(option =>
             option.setName('quantita')
                 .setDescription('Numero di dadi da lanciare (default: 1)')
@@ -20,7 +19,6 @@ module.exports = {
                 .setMaxValue(10) // Cap at 10 to prevent chat spam
         ),
 
-    // 2. Execution Logic
     async execute(interaction) {
         // Retrieve input values. If null, use defaults (6 faces, 1 die).
         const faces = interaction.options.getInteger('facce') || 6;
