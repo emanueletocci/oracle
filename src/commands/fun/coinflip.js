@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const path = require('node:path');
 const { randomInt } = require('node:crypto');
+const colors = require("../../utils/colors");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -24,13 +25,13 @@ module.exports = {
             resultTitle = "🎭 PHANTOM THIEVES WIN! - TESTA";
             resultDescription = "**The show's over.**\nIl nemico è stato annientato con stile. Vittoria perfetta.";
             imageName = 'coinJoker.png'; 
-            color = 0xE61C24;
+            color = colors.p5_red;
         } else {
             // Cross Win
             resultTitle = "💀 SHADOWS WIN! - CROCE";
             resultDescription = "**Senti il rumore di catene...**\nIl Mietitore ti ha trovato. Non c'è via di fuga. *Despair.*";
             imageName = 'coinShadow.png'; 
-            color = 0x000000; 
+            color = colors.shadow_purple; 
         }
 
         const imagePath = path.join(__dirname, `../../assets/images/coins/${imageName}`);

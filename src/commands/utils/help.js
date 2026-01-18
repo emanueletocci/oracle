@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const colors = require('../../utils/colors');   
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,7 +13,7 @@ module.exports = {
         // Create an Embed to make the list looks nice
         const embed = new EmbedBuilder()
             .setTitle('📚 Lista Comandi')
-            .setColor('Red')
+            .setColor(colors.p5_red)
             .setDescription('Ecco tutti i comandi che puoi usare:');
 
         // Transform the collection into a list of fields for the embed

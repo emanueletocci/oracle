@@ -6,6 +6,7 @@ const {
 } = require("discord.js");
 const fs = require("fs"); 
 const path = require("path"); 
+const colors = require('../../utils/colors');   
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -70,7 +71,7 @@ module.exports = {
 			const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
 			const embed = new EmbedBuilder()
-				.setColor("#E60012")
+				.setColor(colors.p5_red)
 				.setDescription(randomQuote)
 				.setImage(`attachment://${randomFile}`);
 

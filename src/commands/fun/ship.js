@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require("discord.js");
 const path = require('node:path');
 
-const chars = require('../../data/characters'); // Ensure the path is correct based on your folder structure
-const colors = require('../../utils/colors');   // Import colors for special cases (e.g., 0% or 99%)
+const chars = require('../../data/characters'); 
+const colors = require('../../utils/colors');   
 
 module.exports = {
     data: new SlashCommandBuilder()

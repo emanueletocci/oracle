@@ -5,6 +5,7 @@ module.exports = {
     velvet_blue: 0x181B59,  // The dark blue of the Velvet Room (Igor)
     phantom_green: 0x2AF02A, // The fluorescent green of Futaba's interface (Oracle)
     joker_black: 0x000000,   // Backgrounds and All-Out Attack
+    shadow_purple: 0x2B0538, // The dark corrupt purple of Shadows/Mementos
 
     // Character Themed Colors
     joker: 0x9B9B9B,    // Gray/Black

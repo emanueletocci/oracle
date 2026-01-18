@@ -5,6 +5,7 @@ const {
 } = require("discord.js");
 const path = require("node:path");
 const fs = require("fs");
+const colors = require("../../utils/colors");
 
 function generatePhantomText(target, sinInput) {
     const sin = sinInput.toLowerCase();
@@ -96,14 +97,13 @@ module.exports = {
         )
         .addStringOption((option) =>
             option
-                .setName("peccato") // Nota: Qui si chiama "peccato"
+                .setName("peccato") 
                 .setDescription("Il desiderio distorto o il peccato")
                 .setRequired(true)
         ),
 
     async execute(interaction) {
         const target = interaction.options.getUser("target");
-        // FIX IMPORTANTE: Deve corrispondere al .setName("peccato") sopra
         const sin = interaction.options.getString("peccato");
 
         // --- SETUP PATHS ---
@@ -114,7 +114,6 @@ module.exports = {
         const ccName = "callingCard.png";
 
         // --- CHECK FILE EXISTENCE ---
-        // Controlliamo entrambi i file per evitare crash
         if (!fs.existsSync(ccPath) || !fs.existsSync(p5LogoPath)) {
             console.error(`❌ Errore file mancanti:\nCard: ${ccPath}\nLogo: ${p5LogoPath}`);
             return interaction.reply({
@@ -123,32 +122,27 @@ module.exports = {
             });
         }
 
-        // --- CREAZIONE ATTACHMENTS ---
         const ccAttachment = new AttachmentBuilder(ccPath, { name: ccName });
         const p5LogoAttachment = new AttachmentBuilder(p5LogoPath, { name: p5LogoName });
 
-        // --- GENERAZIONE TESTO DINAMICO ---
-        // Qui usiamo la tua funzione avanzata invece del testo statico
         const finalDescription = generatePhantomText(target, sin);
 
-        // --- COSTRUZIONE EMBED ---
+        // --- EMBED CREATION ---
         const cardEmbed = new EmbedBuilder()
-            .setColor(0xd02925) // Rosso P5
+            .setColor(colors.p5_red)
             .setTitle("TAKE YOUR HEART 🔥")
             .setAuthor({
                 name: "I Ladri Fantasma di Cuori",
-                iconURL: `attachment://${p5LogoName}`, // Usa il file allegato hat.png
+                iconURL: `attachment://${p5LogoName}`, 
             })
             .setDescription(finalDescription)
-            .setImage(`attachment://${ccName}`) // Usa il file allegato callingCard.png
+            .setImage(`attachment://${ccName}`) 
             .setFooter({ text: "Dacci il tuo cuore." })
             .setTimestamp();
 
-        // --- INVIO RISPOSTA ---
         await interaction.reply({
             content: `📩 **Lettera di Sfida inviata a ${target}!**`,
             embeds: [cardEmbed],
-            // IMPORTANTE: Dobbiamo allegare ENTRAMBI i file
             files: [ccAttachment, p5LogoAttachment],
         });
     },
