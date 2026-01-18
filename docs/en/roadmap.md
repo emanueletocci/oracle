@@ -51,6 +51,7 @@ External access and management via browser.
 Here is the list of commands planned for development, categorized by type.
 
 ### 🎭 Social & Fun
+
 | Command | Type | Description | Priority |
 | :--- | :--- | :--- | :--- |
 | `/allout` | **Fun** | Trigger an *All-Out Attack* animation on a target user. | 🔥 High |
