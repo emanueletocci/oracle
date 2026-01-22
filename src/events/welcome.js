@@ -1,161 +1,238 @@
-const { Events, AttachmentBuilder } = require('discord.js');
-const config = require('../config.json');
-const Canvas = require('@napi-rs/canvas');
-const path = require('path');
-const fs = require('fs');
+// Welcome event handler: generates a stylized welcome image for new guild members
+// and sends it to the configured welcome channel. Uses Canvas to draw the image,
+// selects a random background (if available), draws the username and avatar,
+// and composes the final message with an attachment.
+const { Events, AttachmentBuilder } = require("discord.js");
+const { request } = require("undici");
+const colors = require("../utils/colors.js");
+const config = require("../config.json");
+const Canvas = require("@napi-rs/canvas");
+const path = require("path");
+const fs = require("fs");
 
-// --- REGISTRAZIONE FONT ---
-// Tenta di registrare il font solo se il file esiste, altrimenti usa un fallback
-const fontPath = path.join(__dirname, '../assets/fonts/earwig.otf');
-const fontFamily = fs.existsSync(fontPath) ? 'PersonaFont' : 'Arial';
+// =============================================================================
+// Font registration
+// =============================================================================
+const fontPath = path.join(__dirname, "../assets/fonts/earwig.otf");
+const fontFamily = fs.existsSync(fontPath) ? "PersonaFont" : "Arial";
 
-if (fontFamily === 'PersonaFont') {
-    Canvas.GlobalFonts.registerFromPath(fontPath, 'PersonaFont');
-    console.log('[DEBUG] Font Persona 5 caricato correttamente.');
+if (fontFamily === "PersonaFont") {
+	Canvas.GlobalFonts.registerFromPath(fontPath, "PersonaFont");
+	console.debug("[DEBUG] Font Persona 5 registered successfully.");
 } else {
-    console.warn('[WARN] Font p5font.ttf non trovato nella cartella assets. Userò Arial.');
+	console.warn("[WARN] Font not found. Using Arial fallback.");
 }
 
 module.exports = {
-    enabled: true,
-    name: Events.GuildMemberAdd,
-    once: false,
-    async execute(member) {
-        console.log(`[DEBUG] Evento GuildMemberAdd scattato per: ${member.user.tag}`);
+	enabled: true,
+	name: Events.GuildMemberAdd,
+	once: false,
+	async execute(member) {
+		// Entry point for the GuildMemberAdd event. `member` is the newly
+		// joined guild member. We build an image and post it to the
+		// configured channel.
+		console.debug(
+			`[DEBUG] GuildMemberAdd event triggered for: ${member.user.tag}`,
+		);
 
-        const channelId = config.welcomeChannelId;
-        const channel = member.guild.channels.cache.get(channelId);
+		const channelId = config.welcomeChannelId;
+		const channel = member.guild.channels.cache.get(channelId);
 
-        if (!channel) {
-            console.error(`[ERRORE] Canale con ID ${channelId} non trovato!`);
-            return;
-        }
+		if (!channel) {
+			console.error(`[ERROR] Canale con ID ${channelId} non trovato!`);
+			return;
+		}
 
-        console.log(`[DEBUG] Canale trovato: ${channel.name}. Inizio generazione Canvas...`);
+		try {
+			// =================================================================
+			// CANVAS SETUP
+			// =================================================================
+			const canvas = Canvas.createCanvas(1200, 675);
+			const context = canvas.getContext("2d");
 
-        try {
-            // 1. Creazione Canvas
-            const canvas = Canvas.createCanvas(1024, 450);
-            const ctx = canvas.getContext('2d');
+			// anchorX is used as the approximate horizontal center for the
+			// right-side layout (text and avatar). Transformations are
+			// applied relative to this point for rotated text/shapes.
+			const anchorX = 900;
 
-            // 2. Caricamento Sfondo (FIXED con fs.readFileSync)
-            const backgroundPath = path.join(__dirname, '..', 'assets', 'background.png');
-            
-            if (fs.existsSync(backgroundPath)) {
-                const backgroundBuffer = fs.readFileSync(backgroundPath);
-                const background = await Canvas.loadImage(backgroundBuffer);
-                ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-            } else {
-                // Fallback se manca l'immagine: sfondo rosso scuro
-                console.warn('[WARN] Immagine background.png non trovata. Uso sfondo colorato.');
-                ctx.fillStyle = '#330000';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-            }
+			// Path to optional background images. If the directory exists and
+			// contains png/jpg images, one will be chosen at random. Otherwise
+			// a solid fallback color is used.
+			const backgroundsFolder = path.join(
+				__dirname,
+				"..",
+				"assets",
+				"images",
+				"backgrounds",
+				"welcome",
+			);
 
-            // --- STILE PERSONA 5 ROYAL ---
+			let backgroundLoaded = false;
 
-            // Overlay scuro leggero
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+			try {
+				if (fs.existsSync(backgroundsFolder)) {
+					const files = fs.readdirSync(backgroundsFolder);
+					const validImages = files.filter(
+						(file) => file.endsWith(".png") || file.endsWith(".jpg"),
+					);
 
-            // 3. Testo "WELCOME" (Ruotato)
-            ctx.save();
-            ctx.translate(canvas.width / 2, 280);
-            ctx.rotate(-5 * Math.PI / 180); // Rotazione -5 gradi
+					if (validImages.length > 0) {
+						const randomImage =
+							validImages[Math.floor(Math.random() * validImages.length)];
+						const bgPath = path.join(backgroundsFolder, randomImage);
 
-            ctx.font = `90px "${fontFamily}"`;
-            ctx.textAlign = 'center';
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 8;
-            ctx.strokeText('WELCOME', 0, 0);
-            ctx.fillStyle = 'white';
-            ctx.fillText('WELCOME', 0, 0);
-            ctx.restore();
+						console.debug(`[DEBUG] Selected random background: ${randomImage}`);
 
-            // 4. Box Nome Utente (Forma irregolare stile P5)
-            ctx.save();
-            ctx.translate(canvas.width / 2, 380);
-            ctx.rotate(-3 * Math.PI / 180); // Rotazione diversa per dinamismo
+						// Draw the chosen background stretched to the canvas.
+						const background = await Canvas.loadImage(bgPath);
+						context.drawImage(background, 0, 0, canvas.width, canvas.height);
+						backgroundLoaded = true;
+					} else {
+						console.warn("[WARN] No png/jpg images found in folder.");
+					}
+				} else {
+					console.warn(`[WARN] Cartella non trovata: ${backgroundsFolder}`);
+				}
+			} catch (err) {
+				console.warn("[WARN] Errore caricamento sfondo:", err.message);
+			}
 
-            // Disegno il poligono bianco "sporco"
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.moveTo(-320, -45); // In alto a sx
-            ctx.lineTo(340, -55);  // In alto a dx (leggermente più su)
-            ctx.lineTo(320, 45);   // In basso a dx
-            ctx.lineTo(-340, 35);  // In basso a sx
-            ctx.closePath();
-            ctx.fill();
+			// If no background image was loaded, fill with a branded color
+			// so the image is still visually consistent.
+			if (!backgroundLoaded) {
+				context.fillStyle = colors.p5_red;
+				context.fillRect(0, 0, canvas.width, canvas.height);
+			}
 
-            // Testo del nome
-            ctx.fillStyle = 'black';
-            ctx.textAlign = 'center';
-            
-            // Adattamento dimensione font se il nome è lungo
-            let fontSize = 60;
-            ctx.font = `${fontSize}px "${fontFamily}"`;
-            const username = member.user.username.toUpperCase();
-            
-            while (ctx.measureText(username).width > 600 && fontSize > 30) {
-                fontSize -= 5;
-                ctx.font = `${fontSize}px "${fontFamily}"`;
-            }
+			context.save();
 
-            ctx.fillText(username, 0, 20); // 20 è l'offset verticale per centrare nel poligono
-            ctx.restore();
+			// =================================================================
+			// WELCOME TEXT
+			// =================================================================
 
-            // 5. Avatar Utente
-            // Nota: displayAvatarURL usa URL web, qui loadImage(stringa) va bene solitamente,
-            // ma forziamo l'estensione png per sicurezza.
-            const avatarURL = member.user.displayAvatarURL({ extension: 'png', size: 256 });
-            
-            try {
-                // Carichiamo l'avatar dall'URL
-                const avatar = await Canvas.loadImage(avatarURL);
+			// Draw a rotated 'WELCOME' title near the top-right area. We
+			// apply translate+rotate so the text appears angled for style.
+			context.translate(anchorX, 400);
+			context.rotate((-5 * Math.PI) / 180);
 
-                const avatarX = 512;
-                const avatarY = 130;
-                const avatarRadius = 85;
+			context.font = "75px PersonaFont";
+			context.textAlign = "center";
+			context.fillStyle = "white";
 
-                ctx.save();
-                // Creiamo la maschera circolare
-                ctx.beginPath();
-                ctx.arc(avatarX, avatarY, avatarRadius, 0, Math.PI * 2, true);
-                ctx.closePath();
-                ctx.clip(); 
-                ctx.drawImage(avatar, avatarX - avatarRadius, avatarY - avatarRadius, avatarRadius * 2, avatarRadius * 2);
-                ctx.restore();
+			context.fillText("WELCOME", 0, 0);
 
-                // Bordi Avatar (Doppio bordo: Bianco + Rosso P5)
-                ctx.beginPath();
-                ctx.arc(avatarX, avatarY, avatarRadius, 0, Math.PI * 2, true);
-                ctx.lineWidth = 8;
-                ctx.strokeStyle = 'white';
-                ctx.stroke();
+			context.lineWidth = 2;
+			context.strokeStyle = "black";
+			context.strokeText("WELCOME", 0, 0);
 
-                ctx.beginPath();
-                ctx.arc(avatarX, avatarY, avatarRadius + 6, 0, Math.PI * 2, true);
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = '#d90018'; // Rosso Persona 5
-                ctx.stroke();
+			context.restore();
 
-            } catch (err) {
-                console.error('[ERRORE] Impossibile caricare avatar utente:', err);
-                // Se fallisce l'avatar, il canvas viene inviato senza (o potresti mettere un placeholder)
-            }
+			context.save();
 
-            // 6. Invio
-            const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'welcome.png' });
-            
-            await channel.send({ 
-                content: `Benvenuto nei Phantom Thieves, ${member}!`, 
-                files: [attachment] 
-            });
+			// =================================================================
+			// USERNAME PANEL
+			// =================================================================
 
-            console.log(`[SUCCESS] Messaggio di benvenuto inviato per ${member.user.tag}!`);
+			// Draw a tilted white panel and render the username on top of
+			// it. The panel is a rotated polygon for stylistic framing.
+			context.translate(anchorX, 500);
+			context.rotate((-3 * Math.PI) / 180);
 
-        } catch (error) {
-            console.error(`[ERRORE CRITICO]`, error);
-        }
-    },
+			context.fillStyle = "white";
+			context.beginPath();
+
+			context.moveTo(-220, -40);
+			context.lineTo(230, -50);
+			context.lineTo(210, 40);
+			context.lineTo(-230, 30);
+			context.closePath();
+			context.fill();
+
+			// Username text: measure and scale the font so it fits within
+			// the available width. `applyText` adjusts font size accordingly.
+			context.fillStyle = "black";
+			context.textAlign = "center";
+
+			const username = member.user.username.toUpperCase();
+
+			context.font = applyText(canvas, username, 400);
+
+			context.fillText(username, 0, 18);
+			context.restore();
+
+			try {
+                // =============================================================
+                // USER AVATAR
+                // =============================================================
+				const { body } = await request(
+					member.user.displayAvatarURL({ extension: "png", size: 256 }),
+				);
+				const avatar = await Canvas.loadImage(await body.arrayBuffer());
+
+				const avatarX = anchorX;
+				const avatarY = 230;
+				const avatarRadius = 85;
+
+				// Clip to a circular path so the avatar draws as a circle.
+				context.save();
+				context.beginPath();
+				context.arc(avatarX, avatarY, avatarRadius, 0, Math.PI * 2, true);
+				context.closePath();
+				context.clip();
+
+				context.drawImage(
+					avatar,
+					avatarX - avatarRadius,
+					avatarY - avatarRadius,
+					avatarRadius * 2,
+					avatarRadius * 2,
+				);
+				context.restore();
+
+				// White stroke around avatar
+				context.beginPath();
+				context.arc(avatarX, avatarY, avatarRadius, 0, Math.PI * 2, true);
+				context.lineWidth = 7;
+				context.strokeStyle = "white";
+				context.stroke();
+
+				// Outer colored stroke (brand color)
+				context.beginPath();
+				context.arc(avatarX, avatarY, avatarRadius + 6, 0, Math.PI * 2, true);
+				context.lineWidth = 4;
+				context.strokeStyle = colors.p5_red;
+				context.stroke();
+			} catch (err) {
+				console.error("[ERROR] Impossibile caricare avatar utente:", err);
+			}
+
+			// Create an attachment from the canvas PNG buffer and send the
+			// welcome message. Keep the content localized (Italian in this
+			// project) but the image annotations and code comments remain in
+			// English for developer clarity.
+			const attachment = new AttachmentBuilder(await canvas.encode("png"), {
+				name: "welcome.png",
+			});
+
+			await channel.send({
+				content: `Benvenuto nei Phantom Thieves, ${member}!`,
+				files: [attachment],
+			});
+
+			console.log(`[SUCCESS] Sent welcome for ${member.user.tag}`);
+		} catch (error) {
+			console.error(`[CRITICAL ERROR]`, error);
+		}
+	},
 };
+
+function applyText(canvas, text, maxWidth) {
+	const context = canvas.getContext("2d");
+	let fontSize = 65;
+
+	do {
+		context.font = `${(fontSize -= 5)}px PersonaFont`;
+	} while (context.measureText(text).width > maxWidth - 20 && fontSize > 10);
+
+	return context.font;
+}
