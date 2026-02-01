@@ -141,5 +141,5 @@ vite.config.ts.timestamp-*
 # App files
 config.json
 node_modules
-*.mp3
 .DS_Store
+original_lofi.mp3
